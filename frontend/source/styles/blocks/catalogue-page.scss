@@ -10,7 +10,7 @@
     justify-content: space-between;
     gap: var(--space-md);
     padding: var(--space-md);
-    border-bottom: 1px solid #2a3140;
+    border-bottom: 1px solid var(--color-border);
   }
 
   &__title {
@@ -19,22 +19,10 @@
     font-weight: 600;
   }
 
+  // Layout-only: gaps; chrome lives on shared .button
   &__view-toggles {
     display: flex;
-    gap: 0.53vw;
-  }
-
-  &__view-button {
-    background: var(--color-surface);
-    border: 1px solid #2a3140;
-    color: var(--color-text);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: 0.27vw;
-
-    &--active {
-      border-color: var(--color-accent);
-      color: var(--color-accent);
-    }
+    gap: var(--space-sm);
   }
 
   // Sidebar slot + map row
@@ -49,7 +37,7 @@
     min-height: 0;
     overflow: auto;
     background: var(--color-surface);
-    border-right: 1px solid #2a3140;
+    border-right: 1px solid var(--color-border);
   }
 
   // Map visible beside sidebar

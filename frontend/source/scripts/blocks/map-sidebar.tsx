@@ -10,6 +10,32 @@ type t_SidebarProps = {
   selectedId: string | null;
 };
 
+// Shared button class list for filter chips (domain verbs keep text)
+function chipClass(isActive: boolean): string {
+  return [
+    'button',
+    'button--chip',
+    'button--transparent',
+    'button--with-text',
+    isActive ? 'button--active' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+}
+
+// Shared button + layout hook for catalogue list rows
+function itemClass(isActive: boolean): string {
+  return [
+    'button',
+    'button--transparent',
+    'button--with-text',
+    'map-sidebar__item',
+    isActive ? 'button--active' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+}
+
 // Preact island — district chips, list, selection card (no map API here)
 function MapSidebar({ districts, features, onFilter, onSelect, selectedId }: t_SidebarProps) {
   const [activeDistrict, setActiveDistrict] = useState<string>('all');
@@ -22,7 +48,8 @@ function MapSidebar({ districts, features, onFilter, onSelect, selectedId }: t_S
       <div class="map-sidebar__filters">
         <button
           type="button"
-          class={`map-sidebar__chip ${activeDistrict === 'all' ? 'map-sidebar__chip--active' : ''}`}
+          class={chipClass(activeDistrict === 'all')}
+          aria-pressed={activeDistrict === 'all' ? 'true' : 'false'}
           onClick={() => {
             setActiveDistrict('all');
             onFilter(null);
@@ -34,7 +61,8 @@ function MapSidebar({ districts, features, onFilter, onSelect, selectedId }: t_S
           <button
             type="button"
             key={d}
-            class={`map-sidebar__chip ${activeDistrict === d ? 'map-sidebar__chip--active' : ''}`}
+            class={chipClass(activeDistrict === d)}
+            aria-pressed={activeDistrict === d ? 'true' : 'false'}
             onClick={() => {
               setActiveDistrict(d);
               onFilter(d);
@@ -49,7 +77,8 @@ function MapSidebar({ districts, features, onFilter, onSelect, selectedId }: t_S
           <li key={f.id}>
             <button
               type="button"
-              class={`map-sidebar__item ${selectedId === f.id ? 'map-sidebar__item--active' : ''}`}
+              class={itemClass(selectedId === f.id)}
+              aria-pressed={selectedId === f.id ? 'true' : 'false'}
               onClick={() => onSelect(f)}
             >
               <span class="map-sidebar__item-name">{f.properties.name}</span>

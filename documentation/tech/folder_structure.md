@@ -19,9 +19,10 @@ portfolio_yandex_map_clusters/
         types/          # map-feature.d.ts (t_FeatureCollection, t_ClustererFeature)
       styles/
         main.scss       # imports base/ then blocks/
-        base/           # variables.scss
+        base/           # variables.scss (--space-control-*, --radius-control, --color-border)
         blocks/         # one SCSS file per BEM block
-                        # catalogue-page (--map-view / --list-view), map (--visible), map-sidebar
+                        # button (shared control chrome), catalogue-page, map, map-marker,
+                        # map-cluster, map-sidebar
   documentation/        # tracked human docs
   dist/                 # build output (gitignored)
 ```
@@ -29,3 +30,5 @@ portfolio_yandex_map_clusters/
 Vite treats `frontend/` as the app root. Production assets land in repo-root `dist/`.
 
 Page shell: `.catalogue-page` owns header + `__layout` (`.catalogue-page__sidebar` slot + `.map`). View modifiers `--map-view` / `--list-view` toggle `.map--visible`.
+
+Shared controls: view toggles and filter chips compose `.button` (+ modifiers). Style rules live in `.prompts/base/how_to_visualise.md`. Map markers/clusters stay map DOM — not `.button`.

@@ -1,0 +1,91 @@
+// Shared action control — compose from feature chrome; no feature__button padding/fill
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-text);
+  background: var(--color-surface);
+  // 1px hairline border is an intentional non-vw exception
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  padding: var(--space-control-y) var(--space-control-x);
+  cursor: pointer;
+  box-sizing: border-box;
+  text-align: center;
+
+  &:hover {
+    border-color: var(--color-muted);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--color-accent);
+    outline-offset: 0.13vw;
+  }
+
+  &:disabled {
+    color: var(--color-muted);
+    border-color: var(--color-border);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  // Ghost / chrome on raised surfaces
+  &--transparent {
+    color: var(--color-muted);
+    background: transparent;
+    border-color: transparent;
+
+    &:hover {
+      color: var(--color-text);
+      background: transparent;
+      border-color: transparent;
+    }
+
+    &:disabled {
+      color: var(--color-muted);
+      background: transparent;
+    }
+  }
+
+  // Domain CTA that keeps a word label
+  &--with-text {
+    font-weight: 500;
+  }
+
+  // One primary action fill
+  &--accent {
+    color: #ffffff;
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+
+    &:hover {
+      filter: brightness(1.08);
+    }
+
+    &:disabled {
+      filter: none;
+      opacity: 0.6;
+    }
+  }
+
+  // Compact filter chip density — uses --radius-control, never 999px
+  &--chip {
+    font-size: 0.9em;
+  }
+
+  // Selected view / district / list row
+  &--active {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+
+    &.button--transparent {
+      color: var(--color-accent);
+      border-color: var(--color-accent);
+    }
+  }
+}

@@ -4,13 +4,37 @@
   --color-text: #e8ebf0;
   --color-muted: #939bab;
   --color-accent: #e85d4c;
+  // Hairline for shared control borders
+  --color-border: #2a3140;
   --space-sm: 1.07vw;
   --space-md: 2.13vw;
+  // Control chrome — denser than panel --space-md
+  --space-control-y: 0.35vw;
+  --space-control-x: 0.7vw;
+  --radius-control: 0.27vw;
   --font-base: 1.07vw;
 }
 
 @media (max-width: 768px) {
-  :root { --font-base: 2.4vw; }
+  :root {
+    --font-base: 2.4vw;
+    --space-sm: 2.4vw;
+    --space-md: 4vw;
+    --space-control-y: 0.8vw;
+    --space-control-x: 1.6vw;
+    --radius-control: 0.6vw;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --font-base: 3.2vw;
+    --space-sm: 3.2vw;
+    --space-md: 5.3vw;
+    --space-control-y: 1.1vw;
+    --space-control-x: 2.1vw;
+    --radius-control: 0.8vw;
+  }
 }
 
 *, *::before, *::after { box-sizing: border-box; }

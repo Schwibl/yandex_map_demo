@@ -46,8 +46,11 @@ function setPageView(page: HTMLElement, mapEl: HTMLElement, mode: 'map' | 'list'
   page.classList.toggle('catalogue-page--list-view', !isMap);
   mapEl.classList.toggle('map--visible', isMap);
 
+  // Sync shared button active + pressed state
   page.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((btn) => {
-    btn.classList.toggle('catalogue-page__view-button--active', btn.dataset.view === mode);
+    const pressed = btn.dataset.view === mode;
+    btn.classList.toggle('button--active', pressed);
+    btn.setAttribute('aria-pressed', pressed ? 'true' : 'false');
   });
 }
 
@@ -63,8 +66,8 @@ async function bootstrap(): Promise<void> {
       <header class="catalogue-page__header">
         <h1 class="catalogue-page__title">Warehouse map demo</h1>
         <div class="catalogue-page__view-toggles">
-          <button type="button" class="catalogue-page__view-button catalogue-page__view-button--active" data-view="map">Map</button>
-          <button type="button" class="catalogue-page__view-button" data-view="list">List</button>
+          <button type="button" class="button button--with-text button--active" data-view="map" aria-pressed="true">Map</button>
+          <button type="button" class="button button--with-text" data-view="list" aria-pressed="false">List</button>
         </div>
       </header>
       <div class="catalogue-page__layout">
