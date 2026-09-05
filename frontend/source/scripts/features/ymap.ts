@@ -1,5 +1,14 @@
-import { convertFeatures } from './feature-utils';
-import { createClusterElement, createMarkerElement } from './map-dom';
+import { calculateBounds, convertFeatures } from './feature-utils';
+import { createClusterElement } from './map-cluster';
+import { createMarkerElement } from './map-marker';
+
+// Module refs for updateMap
+let mapInstance: {
+  addChild: (child: unknown) => void;
+  setLocation: (opts: { bounds: number[][]; duration?: number }) => void;
+  setMargin?: (margins: [number, number, number, number]) => void;
+  container?: { offsetWidth: number };
+} | null = null;
 
 let clustererInstance: { update: (opts: { features: t_ClustererFeature[] }) => void } | null = null;
 
@@ -27,7 +36,7 @@ function waitForYmaps3(timeoutMs = 8000): Promise<NonNullable<typeof window.ymap
   });
 }
 
-// Load Yandex Maps v3 script tag
+// Load Yandex Maps v3 script tag (api key from env)
 function loadYmapsScript(apiKey: string): Promise<void> {
   return new Promise((resolve, reject) => {
     if (window.ymaps3) {
@@ -44,60 +53,93 @@ function loadYmapsScript(apiKey: string): Promise<void> {
   });
 }
 
-// Init map with clusterer
+// Fit viewport to features with sidebar-aware margins
+function fitMapToFeatures(features: t_ClustererFeature[]): void {
+  if (!mapInstance || features.length === 0) {
+    return;
+  }
+
+  const width = mapInstance.container?.offsetWidth ?? 0;
+  if (width > 0 && mapInstance.setMargin) {
+    // Leave room for sidebar on the left [top, right, bottom, left]
+    const leftMargin = Math.round(width / 3);
+    const rightMargin = Math.round(width / 12);
+    mapInstance.setMargin([0, rightMargin, 0, leftMargin]);
+  }
+
+  mapInstance.setLocation({
+    bounds: calculateBounds(features),
+    duration: 300,
+  });
+}
+
+// updateMap — refresh clusterer + fit bounds (also on window for CMWP-style callers)
+function updateMap(newFeaturesData: t_FeatureCollection): void {
+  if (!clustererInstance || !mapInstance) {
+    console.warn('[YMap] Cannot update map: not initialized');
+    return;
+  }
+
+  const converted = convertFeatures(newFeaturesData);
+  clustererInstance.update({ features: converted });
+  fitMapToFeatures(converted);
+}
+
+// Init map with layers + grid clusterer
 export async function initYMap(
   container: HTMLElement,
   collection: t_FeatureCollection,
   onMarkerClick: (id: string) => void,
 ): Promise<void> {
-  const apiKey = import.meta.env.VITE_YANDEX_MAPS_API_KEY;
+  const apiKey = import.meta.env.VITE_YANDEX_MAPS_API_KEY?.trim();
 
   if (!apiKey) {
-    container.innerHTML = '<p class="map__placeholder">Set VITE_YANDEX_MAPS_API_KEY in .env to load the map.</p>';
+    container.innerHTML =
+      '<p class="map__placeholder">Set VITE_YANDEX_MAPS_API_KEY in .env to load the map.</p>';
     return;
   }
 
-  await loadYmapsScript(apiKey);
-  const ymaps3 = await waitForYmaps3();
-  await ymaps3.ready;
+  try {
+    await loadYmapsScript(apiKey);
+    const ymaps3 = await waitForYmaps3();
+    await ymaps3.ready;
 
-  const { YMap, YMapDefaultSchemeLayer, YMapFeatureDataSource, YMapLayer, YMapMarker } = ymaps3;
+    const { YMap, YMapDefaultSchemeLayer, YMapFeatureDataSource, YMapLayer, YMapMarker } = ymaps3;
 
-  const ymaps3Api = ymaps3 as typeof ymaps3 & {
-    import: {
-      registerCdn: (template: string, packages: string[]) => void;
-      (pkg: string): Promise<Record<string, unknown>>;
+    const ymaps3Api = ymaps3 as typeof ymaps3 & {
+      import: {
+        registerCdn: (template: string, packages: string[]) => void;
+        (pkg: string): Promise<Record<string, unknown>>;
+      };
     };
-  };
 
-  ymaps3Api.import.registerCdn('https://cdn.jsdelivr.net/npm/{package}', [
-    '@yandex/ymaps3-clusterer@0.0.1',
-  ]);
+    // Clusterer package is not in the base API — load from jsDelivr
+    ymaps3Api.import.registerCdn('https://cdn.jsdelivr.net/npm/{package}/dist/index.js', [
+      '@yandex/ymaps3-clusterer@0.0.1',
+    ]);
 
-  const clustererModule = (await ymaps3Api.import('@yandex/ymaps3-clusterer')) as {
-    YMapClusterer: new (opts: Record<string, unknown>) => {
-      update: (opts: { features: t_ClustererFeature[] }) => void;
+    const clustererModule = (await ymaps3Api.import('@yandex/ymaps3-clusterer@0.0.1')) as {
+      YMapClusterer: new (opts: Record<string, unknown>) => {
+        update: (opts: { features: t_ClustererFeature[] }) => void;
+      };
+      clusterByGrid: (opts: { gridSize: number }) => unknown;
     };
-    clusterByGrid: (opts: { gridSize: number }) => unknown;
-  };
 
-  const { YMapClusterer, clusterByGrid } = clustererModule;
+    const { YMapClusterer, clusterByGrid } = clustererModule;
 
-  const map = new YMap(container, {
-    location: { center: [37.62, 55.75], zoom: 10 },
-  });
+    const map = new YMap(container, {
+      location: { center: [37.62, 55.75], zoom: 10 },
+    });
 
-  map.addChild(new YMapDefaultSchemeLayer({}));
-  const source = new YMapFeatureDataSource({ id: 'marker-source' });
-  map.addChild(source);
-  map.addChild(new YMapLayer({ source: 'marker-source', type: 'markers', zIndex: 1800 }));
+    mapInstance = map as typeof mapInstance;
+    map.addChild(new YMapDefaultSchemeLayer({}));
+    map.addChild(new YMapFeatureDataSource({ id: 'marker-source' }));
+    map.addChild(new YMapLayer({ source: 'marker-source', type: 'markers', zIndex: 1800 }));
 
-  const features = convertFeatures(collection);
+    const features = convertFeatures(collection);
 
-  const clusterer = new YMapClusterer({
-    method: clusterByGrid({ gridSize: 64 }),
-    features,
-    marker: (feature: t_ClustererFeature) =>
+    // Marker renderer — custom DOM pin
+    const markerRender = (feature: t_ClustererFeature) =>
       new YMapMarker(
         {
           coordinates: feature.geometry.coordinates,
@@ -105,37 +147,38 @@ export async function initYMap(
           onClick: () => onMarkerClick(String(feature.id)),
         },
         createMarkerElement(feature.properties),
-      ),
-    cluster: (coordinates: number[], clusterFeatures: t_ClustererFeature[]) => {
+      );
+
+    // Cluster renderer — count + min price badge
+    const clusterRender = (coordinates: number[], clusterFeatures: t_ClustererFeature[]) => {
       const minPrice = Math.min(...clusterFeatures.map((f) => f.properties.price));
       return new YMapMarker(
         { coordinates, source: 'marker-source' },
         createClusterElement(clusterFeatures.length, minPrice),
       );
-    },
-  });
+    };
 
-  map.addChild(clusterer);
-  clustererInstance = clusterer;
+    const clusterer = new YMapClusterer({
+      method: clusterByGrid({ gridSize: 64 }),
+      features,
+      marker: markerRender,
+      cluster: clusterRender,
+    });
 
-  window.updateMap = (data: t_FeatureCollection) => {
-    const converted = convertFeatures(data);
-    clusterer.update({ features: converted });
+    map.addChild(clusterer);
+    clustererInstance = clusterer;
+    window.updateMap = updateMap;
 
-    if (converted.length > 0) {
-      const lngs = converted.map((f) => f.geometry.coordinates[0]);
-      const lats = converted.map((f) => f.geometry.coordinates[1]);
-      map.setLocation({
-        bounds: [
-          [Math.min(...lngs) - 0.05, Math.min(...lats) - 0.05],
-          [Math.max(...lngs) + 0.05, Math.max(...lats) + 0.05],
-        ],
-      });
-    }
-  };
+    // Initial fit so all pins are in view
+    fitMapToFeatures(features);
+  } catch (error) {
+    console.error('[YMap] Error initializing map:', error);
+    container.innerHTML =
+      '<p class="map__placeholder">Map failed to load. Check the API key and console.</p>';
+  }
 }
 
-// Public update helper
+// Typed wrapper used from main.ts
 export function updateMapFeatures(collection: t_FeatureCollection): void {
-  window.updateMap?.(collection);
+  updateMap(collection);
 }

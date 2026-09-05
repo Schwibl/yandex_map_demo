@@ -13,14 +13,18 @@ declare global {
   interface Window {
     ymaps3?: {
       ready: Promise<void>;
-      import: (pkg: string) => Promise<Record<string, unknown>>;
       import: {
         registerCdn: (template: string, packages: string[]) => void;
         (pkg: string): Promise<Record<string, unknown>>;
       };
-      YMap: new (container: HTMLElement, opts: { location: { center: number[]; zoom: number } }) => {
+      YMap: new (
+        container: HTMLElement,
+        opts: { location: { center: number[]; zoom: number } },
+      ) => {
         addChild: (child: unknown) => void;
-        setLocation: (opts: { bounds: number[][] }) => void;
+        setLocation: (opts: { bounds: number[][]; duration?: number }) => void;
+        setMargin?: (margins: [number, number, number, number]) => void;
+        container?: { offsetWidth: number };
       };
       YMapDefaultSchemeLayer: new (opts: Record<string, unknown>) => unknown;
       YMapFeatureDataSource: new (opts: { id: string }) => unknown;

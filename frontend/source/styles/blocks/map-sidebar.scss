@@ -1,7 +1,6 @@
 .map-sidebar {
   padding: var(--space-md);
-  background: var(--color-surface);
-  border-right: 1px solid #2a3140;
+  // Surface / border come from catalogue-page__sidebar slot
   overflow: auto;
 
   &__title {

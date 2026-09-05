@@ -1,6 +1,7 @@
 import { render } from 'preact';
 import { useState } from 'preact/hooks';
 
+// Props from main.ts shared state
 type t_SidebarProps = {
   districts: string[];
   features: t_FeatureCollection;
@@ -9,7 +10,7 @@ type t_SidebarProps = {
   selectedId: string | null;
 };
 
-// Preact sidebar — filters and selection card
+// Preact island — district chips, list, selection card (no map API here)
 function MapSidebar({ districts, features, onFilter, onSelect, selectedId }: t_SidebarProps) {
   const [activeDistrict, setActiveDistrict] = useState<string>('all');
 
@@ -68,18 +69,12 @@ function MapSidebar({ districts, features, onFilter, onSelect, selectedId }: t_S
   );
 }
 
-// Mount sidebar into DOM slot
-export function mountMapSidebar(
-  slot: HTMLElement,
-  props: Omit<t_SidebarProps, 'onFilter' | 'onSelect' | 'selectedId'> & {
-    onFilter: (district: string | null) => void;
-    onSelect: (feature: t_MapFeature | null) => void;
-    selectedId: string | null;
-  },
-): void {
+// First mount into catalogue-page__sidebar slot
+export function mountMapSidebar(slot: HTMLElement, props: t_SidebarProps): void {
   render(<MapSidebar {...props} />, slot);
 }
 
+// Re-render after filter / selection changes
 export function rerenderMapSidebar(slot: HTMLElement, props: t_SidebarProps): void {
   render(<MapSidebar {...props} />, slot);
 }

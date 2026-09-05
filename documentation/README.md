@@ -2,29 +2,16 @@
 
 Custom DOM markers and grid clustering on Yandex Maps v3. Vanilla TS for the map; Preact for the filter sidebar.
 
-## Setup
+See the [root README](../README.md) for setup and API key steps.
 
-```bash
-cp .env.example .env
-# Add your Yandex Maps API key to .env
-npm install
-npm run dev
-```
+## Docs in this folder
 
-Open http://localhost:5175
-
-Get a key from the [Yandex developer console](https://developer.tech.yandex.com/). Allow `localhost` in the key restrictions.
-
-Without a key, the map area shows a placeholder message. The sidebar and mock JSON still work.
-
-## Features
-
-- `@yandex/ymaps3-clusterer` grid clustering
-- Custom marker and cluster DOM
-- `updateMap()` refits bounds when filters change
-- Preact sidebar for district filters and selection
-
-Portfolio extract of commercial catalogue map work (generic mock data, no client branding).
+| File | Concern |
+|------|---------|
+| [`architecture.md`](./architecture.md) | Module flow |
+| [`dev/local_server.md`](./dev/local_server.md) | npm scripts, port, env |
+| [`tech/folder_structure.md`](./tech/folder_structure.md) | Paths |
+| [`tech/next_steps.md`](./tech/next_steps.md) | Gaps / TODOs |
 
 ## Stack
 

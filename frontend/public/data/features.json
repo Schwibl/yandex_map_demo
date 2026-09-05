@@ -16,6 +16,30 @@
     {
       "type": "Feature",
       "id": "2",
+      "geometry": { "type": "Point", "coordinates": ["55.753", "37.621"] },
+      "properties": {
+        "name": "North annex",
+        "addr": "Demo street 1A, Moscow",
+        "price": 9800000,
+        "district": "north",
+        "caption": "9.8 mln RUB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "3",
+      "geometry": { "type": "Point", "coordinates": ["55.749", "37.615"] },
+      "properties": {
+        "name": "Garden depot",
+        "addr": "Demo street 1B, Moscow",
+        "price": 14200000,
+        "district": "north",
+        "caption": "14.2 mln RUB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "4",
       "geometry": { "type": "Point", "coordinates": ["55.735", "37.642"] },
       "properties": {
         "name": "River hub",
@@ -27,7 +51,31 @@
     },
     {
       "type": "Feature",
-      "id": "3",
+      "id": "5",
+      "geometry": { "type": "Point", "coordinates": ["55.737", "37.645"] },
+      "properties": {
+        "name": "Central unit",
+        "addr": "Demo street 7, Moscow",
+        "price": 13500000,
+        "district": "center",
+        "caption": "13.5 mln RUB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "6",
+      "geometry": { "type": "Point", "coordinates": ["55.733", "37.639"] },
+      "properties": {
+        "name": "Embankment store",
+        "addr": "Demo street 7A, Moscow",
+        "price": 11200000,
+        "district": "center",
+        "caption": "11.2 mln RUB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "7",
       "geometry": { "type": "Point", "coordinates": ["55.780", "37.590"] },
       "properties": {
         "name": "Park storage",
@@ -39,7 +87,7 @@
     },
     {
       "type": "Feature",
-      "id": "4",
+      "id": "8",
       "geometry": { "type": "Point", "coordinates": ["55.710", "37.560"] },
       "properties": {
         "name": "West terminal",
@@ -51,7 +99,19 @@
     },
     {
       "type": "Feature",
-      "id": "5",
+      "id": "9",
+      "geometry": { "type": "Point", "coordinates": ["55.712", "37.555"] },
+      "properties": {
+        "name": "West spur",
+        "addr": "Demo street 4A, Moscow",
+        "price": 7600000,
+        "district": "west",
+        "caption": "7.6 mln RUB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "10",
       "geometry": { "type": "Point", "coordinates": ["55.760", "37.700"] },
       "properties": {
         "name": "East depot",
@@ -63,7 +123,7 @@
     },
     {
       "type": "Feature",
-      "id": "6",
+      "id": "11",
       "geometry": { "type": "Point", "coordinates": ["55.725", "37.680"] },
       "properties": {
         "name": "South lot",
@@ -75,25 +135,13 @@
     },
     {
       "type": "Feature",
-      "id": "7",
-      "geometry": { "type": "Point", "coordinates": ["55.745", "37.605"] },
-      "properties": {
-        "name": "Central unit",
-        "addr": "Demo street 7, Moscow",
-        "price": 13500000,
-        "district": "center",
-        "caption": "13.5 mln RUB"
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "8",
+      "id": "12",
       "geometry": { "type": "Point", "coordinates": ["55.770", "37.650"] },
       "properties": {
         "name": "Ring warehouse",
         "addr": "Demo street 8, Moscow",
         "price": 10100000,
-        "district": "north",
+        "district": "east",
         "caption": "10.1 mln RUB"
       }
     }

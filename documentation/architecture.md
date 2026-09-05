@@ -2,12 +2,16 @@
 
 ```
 main.ts
-  ├── fetch features.json
-  ├── map-sidebar.tsx (Preact) — filters + list
-  └── ymap.ts (vanilla)
-        ├── load Yandex CDN script
-        ├── YMapClusterer + custom DOM
-        └── window.updateMap()
+  ├── fetch /data/features.json
+  ├── catalogue-page shell (--map-view / --list-view)
+  ├── blocks/map-sidebar.tsx (Preact) — filters + list + card
+  └── features/ymap.ts (vanilla)
+        ├── load Yandex CDN script (VITE_YANDEX_MAPS_API_KEY)
+        ├── YMap + scheme / source / markers layers
+        ├── YMapClusterer (gridSize 64) + map-marker / map-cluster DOM
+        └── window.updateMap() → clusterer.update + fit bounds
 ```
 
-Vanilla owns map lifecycle. Preact owns sidebar UI. They sync via shared in-memory state in main.ts.
+Vanilla owns map lifecycle. Preact owns sidebar UI. They sync via shared state in `main.ts` and `updateMapFeatures()`.
+
+Coordinate rule: JSON stores `[lat, lng]` strings; ymaps3 needs `[lng, lat]` numbers (`feature-utils.convertCoordinates`).

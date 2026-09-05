@@ -39,7 +39,19 @@ function syncUi(): void {
   });
 }
 
-// Bootstrap page layout
+// Switch catalogue between map and list layout modifiers
+function setPageView(page: HTMLElement, mapEl: HTMLElement, mode: 'map' | 'list'): void {
+  const isMap = mode === 'map';
+  page.classList.toggle('catalogue-page--map-view', isMap);
+  page.classList.toggle('catalogue-page--list-view', !isMap);
+  mapEl.classList.toggle('map--visible', isMap);
+
+  page.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((btn) => {
+    btn.classList.toggle('catalogue-page__view-button--active', btn.dataset.view === mode);
+  });
+}
+
+// Bootstrap page layout shell (map + sidebar slot)
 async function bootstrap(): Promise<void> {
   const root = document.querySelector<HTMLElement>('#app');
   if (!root) {
@@ -50,10 +62,13 @@ async function bootstrap(): Promise<void> {
     <div class="catalogue-page catalogue-page--map-view">
       <header class="catalogue-page__header">
         <h1 class="catalogue-page__title">Warehouse map demo</h1>
-        <button type="button" class="catalogue-page__toggle" data-action="toggle-map">Toggle map width</button>
+        <div class="catalogue-page__view-toggles">
+          <button type="button" class="catalogue-page__view-button catalogue-page__view-button--active" data-view="map">Map</button>
+          <button type="button" class="catalogue-page__view-button" data-view="list">List</button>
+        </div>
       </header>
       <div class="catalogue-page__layout">
-        <div class="map-sidebar-slot"></div>
+        <div class="catalogue-page__sidebar"></div>
         <div class="map map--visible">
           <div class="map__container"></div>
         </div>
@@ -61,13 +76,20 @@ async function bootstrap(): Promise<void> {
     </div>
   `;
 
-  sidebarSlot = root.querySelector<HTMLElement>('.map-sidebar-slot');
+  sidebarSlot = root.querySelector<HTMLElement>('.catalogue-page__sidebar');
+  const mapEl = root.querySelector<HTMLElement>('.map');
   const mapContainer = root.querySelector<HTMLElement>('.map__container');
-  const toggleBtn = root.querySelector<HTMLButtonElement>('[data-action="toggle-map"]');
   const page = root.querySelector<HTMLElement>('.catalogue-page');
 
-  toggleBtn?.addEventListener('click', () => {
-    page?.classList.toggle('catalogue-page--map-wide');
+  // Wire map / list view toggles
+  page?.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!page || !mapEl) {
+        return;
+      }
+      const mode = btn.dataset.view === 'list' ? 'list' : 'map';
+      setPageView(page, mapEl, mode);
+    });
   });
 
   const response = await fetch('/data/features.json');

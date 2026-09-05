@@ -1,6 +1,12 @@
 .map {
   position: relative;
   min-height: 60vh;
+  display: none;
+
+  // Shown when catalogue is in map view
+  &--visible {
+    display: block;
+  }
 
   &__container {
     width: 100%;

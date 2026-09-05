@@ -29,3 +29,37 @@ export function filterByDistrict(collection: t_FeatureCollection, district: stri
     features: collection.features.filter((f) => f.properties.district === district),
   };
 }
+
+// Minimum padding in degrees when all points share a coordinate
+const BOUNDS_MIN_PADDING = 0.1;
+
+// Bounding box [[swLng, swLat], [neLng, neLat]] for setLocation
+export function calculateBounds(features: t_ClustererFeature[]): [[number, number], [number, number]] {
+  let minLng = Infinity;
+  let maxLng = -Infinity;
+  let minLat = Infinity;
+  let maxLat = -Infinity;
+
+  for (const feature of features) {
+    const [lng, lat] = feature.geometry.coordinates;
+    minLng = Math.min(minLng, lng);
+    maxLng = Math.max(maxLng, lng);
+    minLat = Math.min(minLat, lat);
+    maxLat = Math.max(maxLat, lat);
+  }
+
+  // Avoid over-zoom on a single point or coincident pins
+  if (minLng === maxLng) {
+    minLng -= BOUNDS_MIN_PADDING;
+    maxLng += BOUNDS_MIN_PADDING;
+  }
+  if (minLat === maxLat) {
+    minLat -= BOUNDS_MIN_PADDING;
+    maxLat += BOUNDS_MIN_PADDING;
+  }
+
+  return [
+    [minLng, minLat],
+    [maxLng, maxLat],
+  ];
+}
