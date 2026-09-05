@@ -1,0 +1,78 @@
+.map-sidebar {
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border-right: 1px solid #2a3140;
+  overflow: auto;
+
+  &__title {
+    margin: 0 0 var(--space-md);
+    font-size: 1.2em;
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.53vw;
+    margin-bottom: var(--space-md);
+  }
+
+  &__chip {
+    background: #222836;
+    border: 1px solid #3a4458;
+    color: var(--color-text);
+    padding: 0.4vw 0.8vw;
+    border-radius: 999px;
+
+    &--active {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-md);
+  }
+
+  &__item {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #2a3140;
+    padding: var(--space-sm) 0;
+    color: var(--color-text);
+
+    &--active {
+      color: var(--color-accent);
+    }
+  }
+
+  &__item-name {
+    display: block;
+  }
+
+  &__item-price {
+    display: block;
+    font-size: 0.85em;
+    color: var(--color-muted);
+  }
+
+  &__card {
+    padding: var(--space-sm);
+    background: #222836;
+    border-radius: 0.53vw;
+  }
+
+  &__card-title {
+    margin: 0 0 0.27vw;
+  }
+
+  &__card-addr,
+  &__card-price {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.9em;
+  }
+}

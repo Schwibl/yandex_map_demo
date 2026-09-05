@@ -1,0 +1,41 @@
+.catalogue-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md);
+    border-bottom: 1px solid #2a3140;
+  }
+
+  &__toggle {
+    background: var(--color-surface);
+    border: 1px solid #2a3140;
+    color: var(--color-text);
+    padding: var(--space-sm);
+    border-radius: 0.27vw;
+  }
+
+  &__layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 28vw 1fr;
+    min-height: 70vh;
+  }
+
+  &--map-wide {
+    .catalogue-page__layout {
+      grid-template-columns: 18vw 1fr;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .catalogue-page__layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 50vh;
+  }
+}

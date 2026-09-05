@@ -1,0 +1,20 @@
+{
+  "name": "portfolio-yandex-map-clusters",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "preact": "^10.26.4"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.0",
+    "@yandex/ymaps3-types": "^0.0.27",
+    "sass": "^1.77.0",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0"
+  }
+}
