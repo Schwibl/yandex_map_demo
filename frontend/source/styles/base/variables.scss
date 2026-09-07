@@ -12,12 +12,12 @@
   --space-control-y: 0.35vw;
   --space-control-x: 0.7vw;
   --radius-control: 0.27vw;
-  --font-base: 1.07vw;
+  --font-base: 0.85vw;
 }
 
 @media (max-width: 768px) {
   :root {
-    --font-base: 2.4vw;
+    --font-base: 2vw;
     --space-sm: 2.4vw;
     --space-md: 4vw;
     --space-control-y: 0.8vw;
@@ -28,7 +28,7 @@
 
 @media (max-width: 480px) {
   :root {
-    --font-base: 3.2vw;
+    --font-base: 2.7vw;
     --space-sm: 3.2vw;
     --space-md: 5.3vw;
     --space-control-y: 1.1vw;

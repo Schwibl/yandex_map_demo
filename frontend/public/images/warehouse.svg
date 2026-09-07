@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="Warehouse">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a3140"/>
+      <stop offset="100%" stop-color="#181c26"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#sky)"/>
+  <rect x="80" y="140" width="480" height="160" fill="#3a4458"/>
+  <polygon points="60,140 320,60 580,140" fill="#e85d4c"/>
+  <rect x="120" y="180" width="70" height="120" fill="#181c26"/>
+  <rect x="220" y="190" width="90" height="50" fill="#939bab" opacity="0.45"/>
+  <rect x="340" y="190" width="90" height="50" fill="#939bab" opacity="0.45"/>
+  <rect x="460" y="180" width="60" height="120" fill="#181c26"/>
+  <rect x="0" y="300" width="640" height="60" fill="#0f1218" opacity="0.55"/>
+</svg>

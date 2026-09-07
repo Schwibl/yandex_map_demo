@@ -11,6 +11,8 @@ portfolio_yandex_map_clusters/
     index.html
     public/data/
       features.json     # ~12 mock points; coords [lat,lng] strings
+    public/images/
+      warehouse.svg     # placeholder photo for marker detail cards
     source/
       scripts/
         main.ts         # entry; fetch JSON; wire map + sidebar

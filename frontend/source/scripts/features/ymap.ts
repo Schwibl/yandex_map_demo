@@ -1,6 +1,6 @@
 import { calculateBounds, convertFeatures } from './feature-utils';
 import { createClusterElement } from './map-cluster';
-import { createMarkerElement } from './map-marker';
+import { closeOpenMarkerPopup, createMarkerElement, toggleMarkerDetail } from './map-marker';
 
 // Module refs for updateMap
 let mapInstance: {
@@ -80,6 +80,7 @@ function updateMap(newFeaturesData: t_FeatureCollection): void {
     return;
   }
 
+  closeOpenMarkerPopup();
   const converted = convertFeatures(newFeaturesData);
   clustererInstance.update({ features: converted });
   fitMapToFeatures(converted);
@@ -138,23 +139,38 @@ export async function initYMap(
 
     const features = convertFeatures(collection);
 
-    // Marker renderer — custom DOM pin
-    const markerRender = (feature: t_ClustererFeature) =>
-      new YMapMarker(
+    // Marker renderer — pin + hover/detail popups; click selects sidebar
+    const markerRender = (feature: t_ClustererFeature) => {
+      const el = createMarkerElement(feature.properties);
+      return new YMapMarker(
         {
           coordinates: feature.geometry.coordinates,
           source: 'marker-source',
-          onClick: () => onMarkerClick(String(feature.id)),
+          onClick: () => {
+            toggleMarkerDetail(el);
+            onMarkerClick(String(feature.id));
+          },
         },
-        createMarkerElement(feature.properties),
+        el,
       );
+    };
 
-    // Cluster renderer — count + min price badge
+    // Cluster renderer — one-line badge; click zooms to unfold members
     const clusterRender = (coordinates: number[], clusterFeatures: t_ClustererFeature[]) => {
-      const minPrice = Math.min(...clusterFeatures.map((f) => f.properties.price));
+      const el = createClusterElement(clusterFeatures, (member) => {
+        closeOpenMarkerPopup();
+        fitMapToFeatures([member]);
+      });
       return new YMapMarker(
-        { coordinates, source: 'marker-source' },
-        createClusterElement(clusterFeatures.length, minPrice),
+        {
+          coordinates,
+          source: 'marker-source',
+          onClick: () => {
+            closeOpenMarkerPopup();
+            fitMapToFeatures(clusterFeatures);
+          },
+        },
+        el,
       );
     };
 
