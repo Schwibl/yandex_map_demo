@@ -2,59 +2,26 @@
 
 [![PR checks](https://github.com/Schwibl/yandex_map_demo/actions/workflows/pr-checks.yml/badge.svg)](https://github.com/Schwibl/yandex_map_demo/actions/workflows/pr-checks.yml)
 
-Yandex Maps v3 custom markers and grid clustering — vanilla TypeScript map core with a Preact filter sidebar.
+Custom DOM markers and grid clustering on Yandex Maps v3. The map core is vanilla TypeScript; the filter sidebar is Preact. Data is generic mock JSON.
 
-Portfolio extract of commercial catalogue-map patterns (generic mock data, no client branding).
+**Live:** https://yandex-map-demo.vercel.app
 
-## Live demo
+## Stack
+TypeScript 5.6, Vite 6, Preact 10.26 (sidebar only), @yandex/ymaps3-types, SCSS (BEM), Playwright 1.64 for e2e.
 
-https://yandex-map-demo.vercel.app
-
-The live demo needs `VITE_YANDEX_MAPS_API_KEY` set as a Vercel environment variable. Restrict the Yandex key by HTTP referrer to `yandex-map-demo.vercel.app`. The app builds and runs without the key: the map area shows **Map API key not configured** instead of crashing.
-
-## Quick start
-
+## Run
 ```bash
-cp .env.example .env
-# Put your key in .env (or .env.local) — never commit it
+cp .env.example .env   # set VITE_YANDEX_MAPS_API_KEY
 npm install
-npm run dev
+npm run dev            # http://localhost:5175
 ```
-
-Open http://localhost:5175
-
-## Yandex API key
-
-1. Create a key in the [Yandex developer console](https://developer.tech.yandex.com/).
-2. Restrict the key by HTTP referrer to `localhost` and to `yandex-map-demo.vercel.app`.
-3. Set it in **repo-root** env (next to `vite.config.ts` — Vite `envDir`, not `frontend/`):
+`VITE_YANDEX_MAPS_API_KEY` is a Yandex Maps JS API key from the [developer console](https://developer.tech.yandex.com/), restricted to your hosts. Never commit it. Without a key the map shows a placeholder, and the sidebar and mock data still work. Restart Vite after changing `.env`.
 
 ```bash
-# .env  or  .env.local  (both gitignored)
-VITE_YANDEX_MAPS_API_KEY=your_key_here
+npm run typecheck
+npm run build      # typecheck + bundle to dist/
+npm run preview
+npm run e2e        # Playwright
 ```
 
-4. Restart Vite after changing env files (`import.meta.env` is fixed at server start).
-
-Without a key, the map area shows **Map API key not configured**; the sidebar and mock JSON still work.
-
-## Scripts
-
-| Command | Purpose |
-|---------|---------|
-| `npm run dev` | Dev server (port 5175) |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run build` | Typecheck + `dist/` |
-| `npm run preview` | Serve production build |
-| `npm run e2e` | Playwright smoke (needs a build; serves `dist/`) |
-
-CI job names and what they run: [`docs/ci.md`](docs/ci.md).
-
-## What to look at
-
-- `features/ymap.ts` — CDN load, layers, `YMapClusterer`, `window.updateMap`
-- `features/map-marker.ts` / `map-cluster.ts` — custom DOM renderers
-- `features/feature-utils.ts` — `[lat,lng]` → `[lng,lat]`, bounds
-- `blocks/map-sidebar.tsx` — Preact filters calling `updateMap`
-
-More detail: [`documentation/`](documentation/README.md).
+More in [documentation/](documentation/README.md).
