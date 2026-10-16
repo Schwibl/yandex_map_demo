@@ -12,6 +12,7 @@ See the [root README](../README.md) for setup and API key steps.
 | [`dev/local_server.md`](./dev/local_server.md) | npm scripts, port, env |
 | [`tech/folder_structure.md`](./tech/folder_structure.md) | Paths |
 | [`tech/next_steps.md`](./tech/next_steps.md) | Gaps / TODOs |
+| [`../docs/ci.md`](../docs/ci.md) | PR checks, in plain words |
 
 ## Stack
 

@@ -6,7 +6,14 @@ portfolio_yandex_map_clusters/
   package-lock.json
   vite.config.ts        # root: frontend/, outDir: dist/, preact()
   tsconfig.json         # jsxImportSource: preact
-  .env.example          # VITE_YANDEX_MAPS_API_KEY=
+  playwright.config.ts  # smoke tests serve dist/ on port 5175
+  .nvmrc                # Node 24 for CI and Vercel
+  .env.example          # VITE_YANDEX_MAPS_API_KEY= (empty)
+  .github/workflows/pr-checks.yml
+  docs/ci.md
+  e2e/                  # Playwright smoke
+  AGENTS.md             # agent router
+  agents/ skills/ .prompts/base/
   frontend/             # Vite root
     index.html
     public/data/
