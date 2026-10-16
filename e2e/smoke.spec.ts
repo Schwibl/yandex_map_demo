@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import { expect, test, type Page } from '@playwright/test';
 
 // PNG IHDR width/height sit at bytes 16 and 20.
 function pngSize(body: Buffer): { width: number; height: number } {
@@ -19,6 +20,10 @@ test('main UI renders', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Map', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'List', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Catalogue' })).toBeVisible();
+  await expect(page.locator('main')).toHaveCount(1);
+  await expect(page.locator('main .catalogue-page__sidebar')).toBeVisible();
+  await expect(page.locator('main .map__container')).toBeAttached();
+  await expect(page.locator('main header')).toHaveCount(0);
 });
 
 // No API key is baked into the build, so the map pane shows a user-facing card.
@@ -27,8 +32,9 @@ test('shows a placeholder card when the map key is missing', async ({ page }) =>
   await expect(page.getByText('Map is unavailable right now')).toBeVisible();
   await expect(page.getByText('The list still works')).toBeVisible();
   await expect(page.getByText('Set VITE_YANDEX_MAPS_API_KEY')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Show list' })).toBeHidden();
 
-  await page.getByRole('button', { name: 'Show list' }).click();
+  await page.getByRole('button', { name: 'List', exact: true }).click();
   await expect(page.locator('.catalogue-page')).toHaveClass(/catalogue-page--list-view/);
   await expect(page.locator('.map')).toBeHidden();
   await expect(page.getByRole('heading', { name: 'Catalogue' })).toBeVisible();
@@ -105,9 +111,41 @@ test('phone shows one pane and starts on the list', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Map', exact: true }).click();
   await expect(page.getByText('Map is unavailable right now')).toBeVisible();
+  const showList = page.getByRole('button', { name: 'Show list' });
+  await expect(showList).toBeVisible();
+  const fill = await showList.evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(fill).toBe('rgb(201, 74, 58)');
   await expect(page.getByRole('heading', { name: 'Catalogue' })).toBeHidden();
 
   await page.getByRole('button', { name: 'Show list' }).click();
   await expect(page.getByRole('heading', { name: 'Catalogue' })).toBeVisible();
   await expect(page.locator('.map')).toBeHidden();
+});
+
+// Serious and critical only — the bar for this pass.
+function seriousIssues(violations: { id: string; impact?: string | null; help: string }[]): string[] {
+  return violations
+    .filter((v) => v.impact === 'serious' || v.impact === 'critical')
+    .map((v) => `${v.id}: ${v.help}`);
+}
+
+async function expectNoSeriousAxe(page: Page): Promise<void> {
+  const result = await new AxeBuilder({ page }).analyze();
+  expect(seriousIssues(result.violations)).toEqual([]);
+}
+
+// Desktop map pane, phone list, and phone map pane.
+test('axe finds no serious issues', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'Catalogue' })).toBeVisible();
+  await expectNoSeriousAxe(page);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'Catalogue' })).toBeVisible();
+  await expectNoSeriousAxe(page);
+
+  await page.getByRole('button', { name: 'Map', exact: true }).click();
+  await expect(page.getByText('Map is unavailable right now')).toBeVisible();
+  await expectNoSeriousAxe(page);
 });

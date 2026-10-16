@@ -24,7 +24,7 @@ There is no ESLint config, so this job does not lint. There is no unit-test scri
 
 - Installs Chromium
 - `npm run build` with no `VITE_YANDEX_MAPS_API_KEY` in the environment
-- `npm run e2e` — Playwright starts `vite preview` on `127.0.0.1:5175` and smokes the page: the app loads, the main UI renders (title, Map/List toggles, catalogue), and with no key the map pane shows **Map is unavailable right now** instead of crashing. The same file checks the phone list-first layout, chip labels, the result count, and the social meta tags.
+- `npm run e2e` — Playwright starts `vite preview` on `127.0.0.1:5175` and smokes the page: the app loads, the main UI renders (title, Map/List toggles, catalogue inside one `main`), and with no key the map pane shows **Map is unavailable right now** instead of crashing. The same file checks the phone list-first layout, chip labels, the result count, the social meta tags, and axe (no serious or critical violations).
 
 A failed smoke run uploads the `playwright-report` artifact.
 

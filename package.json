@@ -13,6 +13,7 @@
     "preact": "^10.26.4"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.64.1",
     "@preact/preset-vite": "^2.10.0",
     "@yandex/ymaps3-types": "^0.0.27",
