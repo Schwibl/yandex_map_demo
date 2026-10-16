@@ -67,7 +67,8 @@
     border-color: var(--color-accent-strong);
 
     &:hover {
-      filter: brightness(1.08);
+      // Brightness above 1 drops white text under 4.5:1
+      filter: brightness(0.96);
     }
 
     &:disabled {
