@@ -96,7 +96,7 @@ export async function initYMap(
 
   if (!apiKey) {
     container.innerHTML =
-      '<p class="map__placeholder">Set VITE_YANDEX_MAPS_API_KEY in .env to load the map.</p>';
+      '<p class="map__placeholder" role="status">Map API key not configured</p>';
     return;
   }
 
