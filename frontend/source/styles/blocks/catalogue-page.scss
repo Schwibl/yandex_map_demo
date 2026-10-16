@@ -76,16 +76,41 @@
   }
 }
 
+// One pane at a time; the Map/List toggle chooses which
 @media (max-width: 768px) {
   .catalogue-page {
+    height: 100dvh;
+    overflow: hidden;
+
+    &__header {
+      flex-shrink: 0;
+    }
+
     &__layout {
       grid-template-columns: 1fr;
-      grid-template-rows: auto 50vh;
+      grid-template-rows: minmax(0, 1fr);
+      min-height: 0;
+    }
+
+    &__sidebar {
+      height: 100%;
+      border-right: 0;
+    }
+
+    &--map-view {
+      .catalogue-page__sidebar {
+        display: none;
+      }
+
+      .catalogue-page__layout {
+        grid-template-columns: 1fr;
+      }
     }
 
     &--list-view {
       .catalogue-page__layout {
-        grid-template-rows: auto;
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(0, 1fr);
       }
     }
   }

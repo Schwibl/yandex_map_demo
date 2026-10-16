@@ -1,9 +1,12 @@
 :root {
+  color-scheme: dark;
   --color-bg: #0f1218;
   --color-surface: #181c26;
   --color-text: #e8ebf0;
   --color-muted: #939bab;
   --color-accent: #e85d4c;
+  // White on this fill is 4.64:1; --color-accent is 3.44:1
+  --color-accent-strong: #c94a3a;
   // Hairline for shared control borders
   --color-border: #2a3140;
   --space-sm: 1.07vw;
@@ -40,3 +43,12 @@
 *, *::before, *::after { box-sizing: border-box; }
 body { margin: 0; font-family: system-ui, sans-serif; font-size: var(--font-base); color: var(--color-text); background: var(--color-bg); }
 button { font: inherit; cursor: pointer; }
+
+// 16px stops mobile browsers from zooming the page when a field is focused
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}

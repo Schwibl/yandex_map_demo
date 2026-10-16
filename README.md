@@ -1,48 +1,27 @@
 # Yandex map clusters
 
-Yandex Maps v3 custom markers and grid clustering — vanilla TypeScript map core with a Preact filter sidebar.
+[![PR checks](https://github.com/Schwibl/yandex_map_demo/actions/workflows/pr-checks.yml/badge.svg)](https://github.com/Schwibl/yandex_map_demo/actions/workflows/pr-checks.yml)
 
-Portfolio extract of commercial catalogue-map patterns (generic mock data, no client branding).
+Custom DOM markers and grid clustering on Yandex Maps v3. The map core is vanilla TypeScript; the filter sidebar is Preact. Data is generic mock JSON.
 
-## Quick start
+**Live:** https://yandex-map-demo.vercel.app
 
+## Stack
+TypeScript 5.6, Vite 6, Preact 10.26 (sidebar only), @yandex/ymaps3-types, SCSS (BEM), Playwright 1.64 for e2e.
+
+## Run
 ```bash
-cp .env.example .env
-# Put your key in .env (or .env.local) — never commit it
+cp .env.example .env   # set VITE_YANDEX_MAPS_API_KEY
 npm install
-npm run dev
+npm run dev            # http://localhost:5175
 ```
-
-Open http://localhost:5175
-
-## Yandex API key
-
-1. Create a key in the [Yandex developer console](https://developer.tech.yandex.com/).
-2. Restrict the key to `localhost` (and your deploy host when you publish).
-3. Set it in **repo-root** env (next to `vite.config.ts` — Vite `envDir`, not `frontend/`):
+`VITE_YANDEX_MAPS_API_KEY` is a Yandex Maps JS API key from the [developer console](https://developer.tech.yandex.com/), restricted to your hosts. Never commit it. Without a key the map pane shows “Map is unavailable right now”; the env hint is only in the console. On a phone that state opens the list first, Map/List shows one pane at a time, and the card includes a Show list button. The same card is used if the map script fails to load. Restart Vite after changing `.env`.
 
 ```bash
-# .env  or  .env.local  (both gitignored)
-VITE_YANDEX_MAPS_API_KEY=your_key_here
+npm run typecheck
+npm run build      # typecheck + bundle to dist/
+npm run preview
+npm run e2e        # Playwright
 ```
 
-4. Restart Vite after changing env files (`import.meta.env` is fixed at server start).
-
-Without a key, the map shows a placeholder; the sidebar and mock JSON still work.
-
-## Scripts
-
-| Command | Purpose |
-|---------|---------|
-| `npm run dev` | Dev server (port 5175) |
-| `npm run build` | Typecheck + `dist/` |
-| `npm run preview` | Serve production build |
-
-## What to look at
-
-- `features/ymap.ts` — CDN load, layers, `YMapClusterer`, `window.updateMap`
-- `features/map-marker.ts` / `map-cluster.ts` — custom DOM renderers
-- `features/feature-utils.ts` — `[lat,lng]` → `[lng,lat]`, bounds
-- `blocks/map-sidebar.tsx` — Preact filters calling `updateMap`
-
-More detail: [`documentation/`](documentation/README.md).
+More in [documentation/](documentation/README.md).

@@ -6,6 +6,7 @@ main.ts
   ├── catalogue-page shell (--map-view / --list-view)
   ├── blocks/map-sidebar.tsx (Preact) — filters + list + card
   └── features/ymap.ts (vanilla)
+        ├── missing key: centred placeholder (console hint only); phones start on the list
         ├── load Yandex CDN script (VITE_YANDEX_MAPS_API_KEY)
         ├── YMap + scheme / source / markers layers
         ├── YMapClusterer (gridSize 64) + map-marker / map-cluster DOM

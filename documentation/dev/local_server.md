@@ -5,8 +5,10 @@
 | Command | Purpose |
 |---------|---------|
 | `npm run dev` | Vite dev server (port **5175**) |
+| `npm run typecheck` | `tsc --noEmit` |
 | `npm run build` | Typecheck + production build to `dist/` |
 | `npm run preview` | Serve `dist/` locally (port 5175) |
+| `npm run e2e` | Playwright smoke against the preview |
 
 ```bash
 cp .env.example .env
@@ -28,9 +30,9 @@ Vite loads env from the **repo root** (`envDir` in `vite.config.ts`, next to thi
 
 Restart the dev server after any env change.
 
-Without a key, the map area shows a placeholder; sidebar and mock JSON still work.
+Without a key, the map area shows **Map API key not configured**; sidebar and mock JSON still work.
 
-Get a key from the [Yandex developer console](https://developer.tech.yandex.com/). Allow `localhost` in key restrictions.
+Get a key from the [Yandex developer console](https://developer.tech.yandex.com/). Restrict it by HTTP referrer to `localhost` and, on Vercel, to the deploy domain. Set `VITE_YANDEX_MAPS_API_KEY` in the Vercel project for the live demo. CI never receives the key.
 
 ## Layout
 
