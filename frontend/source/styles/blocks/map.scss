@@ -14,11 +14,6 @@
     min-height: 60vh;
   }
 
-  &__placeholder {
-    padding: var(--space-md);
-    color: var(--color-muted);
-  }
-
   // Centre the missing-key card in the map pane
   &__container:has(.map__unavailable) {
     display: flex;
@@ -57,6 +52,13 @@
   &__unavailable-text {
     margin: 0 0 4px;
     color: var(--color-muted);
+  }
+}
+
+// Header List toggle is enough when both panes are on screen
+@media (min-width: 769px) {
+  .map__unavailable [data-show-list] {
+    display: none;
   }
 }
 

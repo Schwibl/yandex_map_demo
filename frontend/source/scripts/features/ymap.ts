@@ -86,9 +86,8 @@ function updateMap(newFeaturesData: t_FeatureCollection): void {
   fitMapToFeatures(converted);
 }
 
-// Missing key is a user-facing empty state; the env hint stays in the console
-function showMapUnavailable(container: HTMLElement): void {
-  console.info('Set VITE_YANDEX_MAPS_API_KEY in .env to load the map.');
+// Same card for a missing key and a failed script load
+function mountUnavailableCard(container: HTMLElement): void {
   container.innerHTML = `
     <div class="map__unavailable">
       <svg class="map__unavailable-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -102,6 +101,12 @@ function showMapUnavailable(container: HTMLElement): void {
   container.querySelector<HTMLButtonElement>('[data-show-list]')?.addEventListener('click', () => {
     document.querySelector<HTMLButtonElement>('[data-view="list"]')?.click();
   });
+}
+
+// Missing key is a user-facing empty state; the env hint stays in the console
+function showMapUnavailable(container: HTMLElement): void {
+  console.info('Set VITE_YANDEX_MAPS_API_KEY in .env to load the map.');
+  mountUnavailableCard(container);
 }
 
 // Init map with layers + grid clusterer
@@ -206,8 +211,7 @@ export async function initYMap(
     fitMapToFeatures(features);
   } catch (error) {
     console.error('[YMap] Error initializing map:', error);
-    container.innerHTML =
-      '<p class="map__placeholder">Map failed to load. Check the API key and console.</p>';
+    mountUnavailableCard(container);
   }
 }
 
