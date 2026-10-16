@@ -8,9 +8,9 @@ Portfolio extract of commercial catalogue-map patterns (generic mock data, no cl
 
 ## Live demo
 
-https://<project>.vercel.app
+https://yandex-map-demo.vercel.app
 
-The live demo needs `VITE_YANDEX_MAPS_API_KEY` set as a Vercel environment variable. Restrict the Yandex key by HTTP referrer to the Vercel domain. The app builds and runs without the key: the map area shows **Map API key not configured** instead of crashing.
+The live demo needs `VITE_YANDEX_MAPS_API_KEY` set as a Vercel environment variable. Restrict the Yandex key by HTTP referrer to `yandex-map-demo.vercel.app`. The app builds and runs without the key: the map area shows **Map API key not configured** instead of crashing.
 
 ## Quick start
 
@@ -26,7 +26,7 @@ Open http://localhost:5175
 ## Yandex API key
 
 1. Create a key in the [Yandex developer console](https://developer.tech.yandex.com/).
-2. Restrict the key by HTTP referrer to `localhost` and, for the live demo, to the Vercel domain.
+2. Restrict the key by HTTP referrer to `localhost` and to `yandex-map-demo.vercel.app`.
 3. Set it in **repo-root** env (next to `vite.config.ts` — Vite `envDir`, not `frontend/`):
 
 ```bash
