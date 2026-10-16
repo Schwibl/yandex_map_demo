@@ -54,6 +54,15 @@ function setPageView(page: HTMLElement, mapEl: HTMLElement, mode: 'map' | 'list'
   });
 }
 
+// Phones open the list when the map cannot load; desktop still shows the placeholder pane
+function initialView(): 'map' | 'list' {
+  const keyMissing = !import.meta.env.VITE_YANDEX_MAPS_API_KEY?.trim();
+  if (keyMissing && window.matchMedia('(max-width: 768px)').matches) {
+    return 'list';
+  }
+  return 'map';
+}
+
 // Bootstrap page layout shell (map + sidebar slot)
 async function bootstrap(): Promise<void> {
   const root = document.querySelector<HTMLElement>('#app');
@@ -61,18 +70,21 @@ async function bootstrap(): Promise<void> {
     return;
   }
 
+  const view = initialView();
+  const mapFirst = view === 'map';
+
   root.innerHTML = `
-    <div class="catalogue-page catalogue-page--map-view">
+    <div class="catalogue-page catalogue-page--${view}-view">
       <header class="catalogue-page__header">
         <h1 class="catalogue-page__title">Warehouse map demo</h1>
         <div class="catalogue-page__view-toggles">
-          <button type="button" class="button button--with-text button--active" data-view="map" aria-pressed="true">Map</button>
-          <button type="button" class="button button--with-text" data-view="list" aria-pressed="false">List</button>
+          <button type="button" class="button button--with-text${mapFirst ? ' button--active' : ''}" data-view="map" aria-pressed="${mapFirst ? 'true' : 'false'}">Map</button>
+          <button type="button" class="button button--with-text${mapFirst ? '' : ' button--active'}" data-view="list" aria-pressed="${mapFirst ? 'false' : 'true'}">List</button>
         </div>
       </header>
       <div class="catalogue-page__layout">
         <div class="catalogue-page__sidebar"></div>
-        <div class="map map--visible">
+        <div class="map${mapFirst ? ' map--visible' : ''}">
           <div class="map__container"></div>
         </div>
       </div>

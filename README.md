@@ -15,7 +15,7 @@ cp .env.example .env   # set VITE_YANDEX_MAPS_API_KEY
 npm install
 npm run dev            # http://localhost:5175
 ```
-`VITE_YANDEX_MAPS_API_KEY` is a Yandex Maps JS API key from the [developer console](https://developer.tech.yandex.com/), restricted to your hosts. Never commit it. Without a key the map shows a placeholder, and the sidebar and mock data still work. Restart Vite after changing `.env`.
+`VITE_YANDEX_MAPS_API_KEY` is a Yandex Maps JS API key from the [developer console](https://developer.tech.yandex.com/), restricted to your hosts. Never commit it. Without a key the map pane shows “Map is unavailable right now” and a Show list button; the env hint is only in the console. On a phone that state opens the list first, and Map/List shows one pane at a time. Restart Vite after changing `.env`.
 
 ```bash
 npm run typecheck

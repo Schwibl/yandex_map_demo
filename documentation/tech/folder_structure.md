@@ -16,6 +16,8 @@ portfolio_yandex_map_clusters/
   agents/ skills/ .prompts/base/
   frontend/             # Vite root
     index.html
+    public/favicon.svg
+    public/og.png       # 1200×630 social preview
     public/data/
       features.json     # ~12 mock points; coords [lat,lng] strings
     public/images/
@@ -38,6 +40,6 @@ portfolio_yandex_map_clusters/
 
 Vite treats `frontend/` as the app root. Production assets land in repo-root `dist/`.
 
-Page shell: `.catalogue-page` owns header + `__layout` (`.catalogue-page__sidebar` slot + `.map`). View modifiers `--map-view` / `--list-view` toggle `.map--visible`.
+Page shell: `.catalogue-page` owns header + `__layout` (`.catalogue-page__sidebar` slot + `.map`). View modifiers `--map-view` / `--list-view` toggle `.map--visible`. At 768px and below those modifiers show one pane at a time.
 
 Shared controls: view toggles and filter chips compose `.button` (+ modifiers). Style rules live in `.prompts/base/how_to_visualise.md`. Map markers/clusters stay map DOM — not `.button`.
