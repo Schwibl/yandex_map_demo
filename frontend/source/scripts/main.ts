@@ -82,12 +82,12 @@ async function bootstrap(): Promise<void> {
           <button type="button" class="button button--with-text${mapFirst ? '' : ' button--active'}" data-view="list" aria-pressed="${mapFirst ? 'false' : 'true'}">List</button>
         </div>
       </header>
-      <div class="catalogue-page__layout">
+      <main class="catalogue-page__layout">
         <div class="catalogue-page__sidebar"></div>
         <div class="map${mapFirst ? ' map--visible' : ''}">
           <div class="map__container"></div>
         </div>
-      </div>
+      </main>
     </div>
   `;
 
