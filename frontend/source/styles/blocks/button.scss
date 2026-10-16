@@ -63,8 +63,8 @@
   // One primary action fill
   &--accent {
     color: #ffffff;
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+    background: var(--color-accent-strong);
+    border-color: var(--color-accent-strong);
 
     &:hover {
       filter: brightness(1.08);

@@ -5,6 +5,8 @@
   --color-text: #e8ebf0;
   --color-muted: #939bab;
   --color-accent: #e85d4c;
+  // White on this fill is 4.64:1; --color-accent is 3.44:1
+  --color-accent-strong: #c94a3a;
   // Hairline for shared control borders
   --color-border: #2a3140;
   --space-sm: 1.07vw;
