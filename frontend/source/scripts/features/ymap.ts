@@ -86,6 +86,24 @@ function updateMap(newFeaturesData: t_FeatureCollection): void {
   fitMapToFeatures(converted);
 }
 
+// Missing key is a user-facing empty state; the env hint stays in the console
+function showMapUnavailable(container: HTMLElement): void {
+  console.info('Set VITE_YANDEX_MAPS_API_KEY in .env to load the map.');
+  container.innerHTML = `
+    <div class="map__unavailable">
+      <svg class="map__unavailable-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+      </svg>
+      <p class="map__unavailable-title" role="status">Map is unavailable right now</p>
+      <p class="map__unavailable-text">The list still works</p>
+      <button type="button" class="button button--accent button--with-text" data-show-list>Show list</button>
+    </div>
+  `;
+  container.querySelector<HTMLButtonElement>('[data-show-list]')?.addEventListener('click', () => {
+    document.querySelector<HTMLButtonElement>('[data-view="list"]')?.click();
+  });
+}
+
 // Init map with layers + grid clusterer
 export async function initYMap(
   container: HTMLElement,
@@ -94,9 +112,8 @@ export async function initYMap(
 ): Promise<void> {
   const apiKey = import.meta.env.VITE_YANDEX_MAPS_API_KEY?.trim();
 
-  if (!apiKey) {
-    container.innerHTML =
-      '<p class="map__placeholder" role="status">Map API key not configured</p>';
+  if (!import.meta.env.VITE_YANDEX_MAPS_API_KEY || !apiKey) {
+    showMapUnavailable(container);
     return;
   }
 
