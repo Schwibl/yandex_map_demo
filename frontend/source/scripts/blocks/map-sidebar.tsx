@@ -10,6 +10,16 @@ type t_SidebarProps = {
   selectedId: string | null;
 };
 
+// District keys in the JSON are lowercase; the chip shows a label
+function districtLabel(district: string): string {
+  return district.charAt(0).toUpperCase() + district.slice(1);
+}
+
+// "4 warehouses" — singular only when the filter leaves one row
+function warehouseCountLabel(count: number): string {
+  return `${count} ${count === 1 ? 'warehouse' : 'warehouses'}`;
+}
+
 // Shared button class list for filter chips (domain verbs keep text)
 function chipClass(isActive: boolean): string {
   return [
@@ -68,10 +78,13 @@ function MapSidebar({ districts, features, onFilter, onSelect, selectedId }: t_S
               onFilter(d);
             }}
           >
-            {d}
+            {districtLabel(d)}
           </button>
         ))}
       </div>
+      <p class="map-sidebar__count" aria-live="polite">
+        {warehouseCountLabel(features.features.length)}
+      </p>
       <ul class="map-sidebar__list">
         {features.features.map((f) => (
           <li key={f.id}>
