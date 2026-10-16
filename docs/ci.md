@@ -7,7 +7,7 @@ Branch protection matches these **job names** exactly:
 1. `Install, typecheck, build`
 2. `Playwright smoke`
 
-GitHub shows each one as a status check named `PR checks / <job name>`. Require those two checks before a squash-merge to `main`.
+GitHub registers those strings as the status check names. Require `Install, typecheck, build` and `Playwright smoke` before a squash-merge to `main`.
 
 ## What each job does
 
